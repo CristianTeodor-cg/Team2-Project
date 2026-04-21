@@ -18,7 +18,7 @@ def test_login(page):
     page.goto("http://10.40.226.200/BC_Team_2/index.php")
 
     #Check log-in visibility
-    expect(page.get_by_role("link", name="Login")).to_be_visible()
+    expect(page.get_by_role("link", name="Login")).to_be_enabled()
 
     #Click log-in
     page.get_by_role("link", name="Login").click()
