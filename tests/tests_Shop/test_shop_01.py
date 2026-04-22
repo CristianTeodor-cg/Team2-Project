@@ -35,7 +35,15 @@ def test_shop_show_article(page):
         expect(price).to_contain_text("€")
 
         expect(image).to_be_visible()
-        expect(image).to_have_attribute("src")
+        src = image.get_attribute("src")
+        assert src is not None
+        assert src.startswith("data:image/")
+
+        
+        # Ensure image is really loaded
+        assert image.evaluate("img => img.complete && img.naturalWidth > 0")
+
+
 
         expect(add_button).to_be_visible()
         expect(add_button).to_be_enabled()
