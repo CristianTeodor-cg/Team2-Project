@@ -1,4 +1,3 @@
-
 import re
 from decimal import Decimal, ROUND_HALF_UP
 from playwright.sync_api import expect
@@ -13,22 +12,18 @@ def _decimal_to_eur(value: Decimal) -> str:
     v = value.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
     return f"{v:.2f}".replace(".", ",") + " €"
 
-def test_cart_update_quantity_to_5_shows_1995(page):
-    
+def test_cart_update_quantity_above_stock_shows_error(page):
     page.goto("http://10.40.226.200/BC_Team_2/shop.php")
     page.get_by_role("link", name="Einkaufen").nth(1).click()
     page.get_by_role("link", name="1").click()
 
-    
     page.goto("http://10.40.226.200/BC_Team_2/shoppingcart.php")
     expect(page.locator("#carttable")).to_be_visible()
 
-    
     page.goto("http://10.40.226.200/BC_Team_2/shop.php")
     page.get_by_role("link", name="Einkaufen").nth(1).click()
     page.get_by_role("link", name="1").click()
 
-    
     page.goto("http://10.40.226.200/BC_Team_2/shoppingcart.php")
     cart = page.locator("#carttable")
     expect(cart).to_be_visible()
@@ -54,12 +49,10 @@ def test_cart_update_quantity_to_5_shows_1995(page):
     if -1 in (idx_qty, idx_stock, idx_unit, idx_total):
         raise AssertionError(f"Spalten nicht gefunden. Header: {header_texts}")
 
-    # Produktzeilen: alle tr, die ein quantity-input enthalten
     rows = cart.locator("tr")
     row_count = rows.count()
 
-    # Wir setzen für jede Zeile eine Menge, die sicher < Bestand ist:
-    # Zielmenge = min(5, Bestand-1). Falls Bestand <=1, überspringen wir die Zeile.
+    tested = False
     for r in range(1, row_count):
         row = rows.nth(r)
         qty_input = row.locator("input[name^='quantity['], input[type='number']").first
@@ -72,3 +65,23 @@ def test_cart_update_quantity_to_5_shows_1995(page):
 
         stock_txt = cells.nth(idx_stock).inner_text()
         m = re.search(r"\d+", stock_txt)
+        if not m:
+            continue
+
+        stock = int(m.group())
+        invalid_qty = stock + 1
+
+        qty_input.click()
+        qty_input.fill(str(invalid_qty))
+
+        tested = True
+        break
+
+    if not tested:
+        raise AssertionError("Keine Produktzeile mit Quantity-Input und Bestand gefunden – Warenkorb evtl. leer?")
+
+    page.get_by_role("button", name="Warenkorb aktualisieren").click()
+
+    expect(page.locator("#setcart")).to_contain_text(
+        re.compile(r"\.?\s*Es kann nur die aktuell verfügbare Menge bestellt werden\.")
+    )
