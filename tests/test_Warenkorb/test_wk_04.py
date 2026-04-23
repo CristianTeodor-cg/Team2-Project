@@ -17,7 +17,9 @@ def test_cart_update_quantity_to_5_shows_1995(page):
     
     page.goto("http://10.40.226.200/BC_Team_2/shop.php")
     page.get_by_role("link", name="Einkaufen").nth(1).click()
-    page.get_by_role("link", name="1").click()
+    page.locator('//*[@id="shoppingcart"]').click()
+    
+    
 
     
     page.goto("http://10.40.226.200/BC_Team_2/shoppingcart.php")
@@ -26,7 +28,7 @@ def test_cart_update_quantity_to_5_shows_1995(page):
     
     page.goto("http://10.40.226.200/BC_Team_2/shop.php")
     page.get_by_role("link", name="Einkaufen").nth(1).click()
-    page.get_by_role("link", name="1").click()
+    page.locator('//*[@id="shoppingcart"]').click()
 
     
     page.goto("http://10.40.226.200/BC_Team_2/shoppingcart.php")
@@ -72,3 +74,18 @@ def test_cart_update_quantity_to_5_shows_1995(page):
 
         stock_txt = cells.nth(idx_stock).inner_text()
         m = re.search(r"\d+", stock_txt)
+
+        qty = Decimal(qty_input.input_value())
+
+        unit_price = _eur_to_decimal(cells.nth(idx_unit).inner_text())
+        total_price = _eur_to_decimal(cells.nth(idx_total).inner_text())
+
+        expected_total = (unit_price * qty).quantize(
+            Decimal("0.01"), rounding=ROUND_HALF_UP
+        )
+
+    
+    assert total_price == expected_total, (
+        f"Gesamtpreis falsch: {qty} x {_decimal_to_eur(unit_price)} "
+        f"= {_decimal_to_eur(expected_total)}, angezeigt: {_decimal_to_eur(total_price)}"
+    )

@@ -15,14 +15,14 @@ def _decimal_to_eur(value: Decimal) -> str:
 def test_cart_update_quantity_above_stock_shows_error(page):
     page.goto("http://10.40.226.200/BC_Team_2/shop.php")
     page.get_by_role("link", name="Einkaufen").nth(1).click()
-    page.get_by_role("link", name="1").click()
+    page.locator('//*[@id="shoppingcart"]').click()
 
     page.goto("http://10.40.226.200/BC_Team_2/shoppingcart.php")
     expect(page.locator("#carttable")).to_be_visible()
 
     page.goto("http://10.40.226.200/BC_Team_2/shop.php")
     page.get_by_role("link", name="Einkaufen").nth(1).click()
-    page.get_by_role("link", name="1").click()
+    page.locator('//*[@id="shoppingcart"]').click()
 
     page.goto("http://10.40.226.200/BC_Team_2/shoppingcart.php")
     cart = page.locator("#carttable")
