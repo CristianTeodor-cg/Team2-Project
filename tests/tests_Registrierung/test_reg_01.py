@@ -15,7 +15,9 @@ def test_register(page):
 
     USER = create_user()
     PASS = "Passwort123"
+   
 
+    
     with allure.step("Open application homepage"):
         response = page.goto("http://10.40.226.200/BC_Team_2/index.php")
         assert response is not None
@@ -25,7 +27,7 @@ def test_register(page):
         page.get_by_role("link", name="Login").click()
 
     with allure.step("Check validation for non-existing user"):
-        page.get_by_role("textbox", name="Username").fill(USER)
+        page.get_by_role("textbox", name="Username").type(USER)
         page.get_by_role("textbox", name="Username").press("Tab")
         expect(page.get_by_text("Dieser User existiert nicht.")).to_be_visible()
 
@@ -41,9 +43,12 @@ def test_register(page):
 
     with allure.step("Fill registration form"):
         page.get_by_role("checkbox", name="Ja, ich habe die AGB gelesen").check()
-        page.get_by_role("textbox", name="Username").fill(USER)
+
+        page.get_by_role("textbox", name="Username").type(USER)
+        page.locator("#register-username").fill(USER)
+
         page.locator("#register-pw").fill(PASS)
-        page.get_by_role("textbox", name="Passwort wiederholen").fill(PASS)
+        page.get_by_role("textbox", name="Passwort wiederholen").type(PASS)
 
     with allure.step("Submit registration"):
         page.get_by_role("button", name="Registrieren").click()
