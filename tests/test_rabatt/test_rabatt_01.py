@@ -1,16 +1,21 @@
 from page_objects import AppPage
 
+from playwright.sync_api import expect
+
 def test_Rabattfunktion_im_Warenkorb(page):
 
 
     #Start on any page like
-    page.goto("http://10.40.226.200/BC_Team_2/shoppingcart.php")
+    page.goto("http://10.40.226.200/BC_Team_2/index.php")
+
+    app=AppPage.AppPage(page)
 
     # dieser Test kontrolliert, ob im Warenkorb die Rabattfunktion nutzbar ist; sie funktioniert nur im eingeloggten Zustand 
 
     
-    
-    app.login(_USER, _PASSWORD) 
+    page.locator("#accountbar > a").click()
+    app.login("MarkusTE", "Mark0426TE") 
+    expect(page.locator("#loginContainer")).to_be_visible() 
 
 
 # die folgenden Schritte inkl. Änderung der Item-Anzahl sollen erfolgen
@@ -18,6 +23,7 @@ def test_Rabattfunktion_im_Warenkorb(page):
 # Schritt 1 ergibt keinen Rabatt, da die Item-Zahl zu gering ist
    
 
+  
     page.goto("http://10.40.226.200/BC_Team_2/shoppingcart.php")
     page.locator("input[name=\"quantity[12]\"]").click()
     expect(page.locator("#rabatt")).to_contain_text("Rabatt: 0,00 €")
@@ -33,10 +39,11 @@ def test_Rabattfunktion_im_Warenkorb(page):
     expect(page.locator("#carttable")).to_contain_text("2,00 €")
     expect(page.get_by_text("Rabatt: 2,00 €")).to_be_visible()
 
+
+
     # Schritt 3 zeigt Itemzahl > 20, der Rabatt geht auf 20% und die Gesamtsumme des Warenkorb > 100 EUR, so dass noch zusätzlich 5,00 EUR abgezogen werden
 
     page.goto("http://10.40.226.200/BC_Team_2/shoppingcart.php")
-    page.locator("input[name=\"quantity[12]\"]").click()
     page.locator("input[name=\"quantity[12]\"]").click()
     page.locator("input[name=\"quantity[12]\"]").fill("21")
     page.locator("input[name=\"quantity[12]\"]").press("Enter")

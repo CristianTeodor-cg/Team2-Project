@@ -1,15 +1,20 @@
 from page_objects import AppPage
 
+from playwright.sync_api import expect
+
 def test_Product_data_base_check_shown_data_base_table(page):
 
 
     #Start on any page like
     page.goto("http://10.40.226.200/BC_Team_2/index.php")
 
+    app=AppPage.AppPage(page)
+
     #Check if "Admin" link in the right upper corner redirects to product data web page and if all objects on the page are existing
 
-
+    page.locator("#accountbar > a").click()
     app.login("MarkusTE", "Mark0426TE") 
+    expect(page.locator("#loginContainer")).to_be_visible() 
     
 
 
