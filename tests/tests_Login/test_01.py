@@ -39,6 +39,7 @@ def test_login(page):
     # page.get_by_role("button", name="Login").click()
 
     app.login(_USER, _PASSWORD)
+    
 
     #Verify log-in process 
     expect(page.get_by_role("link", name="Profil")).to_be_visible()

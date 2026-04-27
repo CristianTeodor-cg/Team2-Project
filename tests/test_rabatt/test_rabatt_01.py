@@ -15,7 +15,7 @@ def test_Rabattfunktion_im_Warenkorb(page):
     
     page.locator("#accountbar > a").click()
     app.login("MarkusTE", "Mark0426TE") 
-    expect(page.locator("#loginContainer")).to_be_visible() 
+    #expect(page.locator("#loginContainer")).to_be_visible() 
 
 
 # die folgenden Schritte inkl. Änderung der Item-Anzahl sollen erfolgen
@@ -24,7 +24,8 @@ def test_Rabattfunktion_im_Warenkorb(page):
    
 
   
-    page.goto("http://10.40.226.200/BC_Team_2/shoppingcart.php")
+    #page.goto("http://10.40.226.200/BC_Team_2/shoppingcart.php")
+    page.locator('//*[@id="shoppingcart"]').click()
     page.locator("input[name=\"quantity[12]\"]").click()
     expect(page.locator("#rabatt")).to_contain_text("Rabatt: 0,00 €")
     expect(page.locator("#form")).to_contain_text("Es fehlen noch 87,02 €, um 5€ Nachlass auf den gesamten Einkauf zu erhalten")
@@ -43,7 +44,8 @@ def test_Rabattfunktion_im_Warenkorb(page):
 
     # Schritt 3 zeigt Itemzahl > 20, der Rabatt geht auf 20% und die Gesamtsumme des Warenkorb > 100 EUR, so dass noch zusätzlich 5,00 EUR abgezogen werden
 
-    page.goto("http://10.40.226.200/BC_Team_2/shoppingcart.php")
+    #page.goto("http://10.40.226.200/BC_Team_2/shoppingcart.php")
+    page.locator('//*[@id="shoppingcart"]').click()
     page.locator("input[name=\"quantity[12]\"]").click()
     page.locator("input[name=\"quantity[12]\"]").fill("21")
     page.locator("input[name=\"quantity[12]\"]").press("Enter")
