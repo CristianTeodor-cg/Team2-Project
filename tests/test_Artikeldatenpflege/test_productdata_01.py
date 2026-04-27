@@ -17,10 +17,14 @@ def test_Product_data_base_check_shown_data_base_table(page):
     expect(page.locator("#loginContainer")).to_be_visible() 
     
 
+    # öffne Artikelpflege-Page  
+    #page.locator('//*[@id="shoppingcart"]').click()
+    page.goto("http://10.40.226.200/BC_Team_2/artikeldatenpflege.php")
 
-    # dieser Test wurde mit dem Object Code Inspector erstellt
-    
-    page.locator("#cartCount").click()
+
+
+
+    # zeige die Tabellenelemente auf der Seite zum Pflegen der Artikeldaten
     
     expect(page.locator("h2")).to_contain_text("Artikeldatenpflege")
     expect(page.locator("#td_productname1")).to_contain_text("Nivea Creme")
