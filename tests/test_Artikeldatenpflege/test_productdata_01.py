@@ -19,14 +19,20 @@ def test_Product_data_base_check_shown_data_base_table(page):
 
     # öffne Artikelpflege-Page  
     #page.locator('//*[@id="shoppingcart"]').click()
-    page.goto("http://10.40.226.200/BC_Team_2/artikeldatenpflege.php")
+
+    page.wait_for_timeout(5000)
+    page.locator('#accountbar > table > tbody > tr:nth-child(2) > td > a:nth-child(1)').click()
+    
+    
+
+
 
 
 
 
     # zeige die Tabellenelemente auf der Seite zum Pflegen der Artikeldaten
     
-    expect(page.locator("h2")).to_contain_text("Artikeldatenpflege")
+    expect(page.locator('body > content > center > h2')).to_contain_text(" Artikeldatenpflege ")
     expect(page.locator("#td_productname1")).to_contain_text("Nivea Creme")
     expect(page.locator("#td_preis1")).to_contain_text("1.99")
     expect(page.locator("#td_bestand1")).to_contain_text("6")

@@ -8,13 +8,16 @@ def test_shop_open_and_close_coffee_modal(page):
 
     # Open shop
     page.get_by_role("link", name="Shop").click()
-
+    
+    page.wait_for_timeout(7000)
+    
     # Open coffee product
     product_link = page.get_by_role(
         "link",
         name="Kaffee do it yourself",
         exact=True
     )
+
     expect(product_link).to_be_visible()
     product_link.click()
 
