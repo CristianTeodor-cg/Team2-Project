@@ -7,7 +7,7 @@ on:
 
 jobs:
   test-and-report:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, windows]
 
     steps:
       - name: Checkout repo
