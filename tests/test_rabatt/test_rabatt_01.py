@@ -19,7 +19,7 @@ def test_Rabattfunktion_im_Warenkorb(page):
     page.locator("#accountbar > a").click()
 
     #Insert credentials
-    app.login("MarkusTE", "Mark0426TE") 
+    app.login("AdminUser", "Admin") 
 
     #Navigate to shop
     page.locator("body > header > nav > a:nth-child(3)").click()
@@ -68,24 +68,32 @@ def test_Rabattfunktion_im_Warenkorb(page):
     #assert rabatt_0 == 0,00
 
 
-
+    #Fill with 10
+    page.locator('//*[@id="carttable"]/tbody/tr[2]/td[2]/input').fill("")
     page.locator('//*[@id="carttable"]/tbody/tr[2]/td[2]/input').fill("10")
     page.locator('//*[@id="buttonRefresh"]').click()
 
+    #Get Rabat text
     text = page.locator("css=#rabatt").inner_text()
     
+    #Save Rabat text in var
     match = re.search(r"([0-9]+,[0-9]{2})", text)
     rabatt_str_1 = match.group(1)
 
-    
-    page.locator('//*[@id="carttable"]/tbody/tr[2]/td[2]/input').fill("20")
+    #Find field again
+    expect(page.locator('//*[@id="carttable"]/tbody/tr[2]/td[2]/input')).to_be_visible
+    page.locator('//*[@id="carttable"]/tbody/tr[2]/td[2]/input').fill("")
+    page.locator('//*[@id="carttable"]/tbody/tr[2]/td[2]/input').fill("27")
     page.locator('//*[@id="buttonRefresh"]').click()
 
     
-
+    expect(page.locator('//*[@id="carttable"]/tbody/tr[2]/td[2]/input')).to_be_visible
     text = page.locator("css=#rabatt").inner_text()  
     match = re.search(r"([0-9]+,[0-9]{2})", text)
-    rabatt_str_2 = match.group(1)  
+    rabatt_str_2 = match.group(1)
+
+    page.locator('#setcart > button:nth-child(1)').click()
+     
 
     
     rabatt_1 = euro_str_to_float(rabatt_str_1)
