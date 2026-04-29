@@ -2,6 +2,8 @@ import pytest
 from playwright.sync_api import expect
 
 ## Wichtig ! Nutz bitte das Format unten für smoke tests! @pytest.mark.smoke ..
+import allure
+@allure.severity(allure.severity_level.BLOCKER)
 
 @pytest.mark.smoke
 def test_about(page):

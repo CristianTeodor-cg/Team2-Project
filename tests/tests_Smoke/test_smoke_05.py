@@ -1,7 +1,8 @@
 import pytest
 from playwright.sync_api import expect
 
-
+import allure
+@allure.severity(allure.severity_level.BLOCKER)
 def test_login(page):
 
     response = page.goto("http://10.40.226.200/BC_Team_2/index.php")

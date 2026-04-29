@@ -1,6 +1,7 @@
 import pytest
 from playwright.sync_api import expect
-
+import allure
+@allure.severity(allure.severity_level.MINOR)
 
 def test_shop(page):
 
